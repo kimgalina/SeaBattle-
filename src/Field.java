@@ -35,24 +35,64 @@ public class Field {
     {
         if(ShipsCount == 10)// if it is classical version of the game
         {
-            int i  = 1, ShipsNumberOfEachKind = 1;
+            int ShipsNumberOfEachKind = 1;
             for(int cell  = 4; cell > 0; cell--)// number of ships models
             {
-                for(i = ShipsNumberOfEachKind ; i > 0; i--)// number of ships of one model
+                for(int i = ShipsNumberOfEachKind ; i > 0; i--)// number of ships of one model
                 {
-                    // generate random values [0,9] for x and y coordinates of initial point of our ship
+                    boolean isShipSet = false;
                     int x,y;
-                    x = rand.nextInt(10);
-                    y = rand.nextInt(10);
-                  
+                    while(!isShipSet)
+                    {
+                        // generate random values [0,9] for x and y coordinates of initial point of our ship
+                        x = rand.nextInt(10);
+                        y = rand.nextInt(10);
+                        System.out.print("x = " + x + " y = " + y + "\n");
+                        // проверка ///////////////////////
+                        if(field[x][y] == 0 && isNoShipNear(x,y))// если клетка не занята ,нет ли кораблей поблизости
+                        {
+                            if(cell != 1)// если у нас не однопалубный корабль
+                            {
+                                // выбор направления ///////////(сначала сделаем их прямыми  то есть корабль будет расти в одну сторону )
+                                // но далее можно сделать цикл с постоянным выбором напрвления так что корабль может расти в разных направлениях
+                                if(isDirectionFound(x,y,cell))
+                                {
+                                    // устанавливаем корабль
+
+
+                                    isShipSet = true;
+                                }
+                            }
+                            else{
+                                field[x][y] = 1;
+                            }
+                        }
+                    }
 
                 }
                 ShipsNumberOfEachKind++;
+                System.out.println();
             }
         }else {
             // если игра не классическая ?
         }
 
     }
+    private boolean isNoShipNear(int x,int y)
+    {
+        // рассмотреть ситуацию выхода за массив
+        return (field[x + 1][y + 1] == 0 && field[x][y + 1] == 0 && field[x][y-1] == 0 &&
+                field[x - 1][y + 1] == 0 && field[x - 1][y] == 0 && field[x + 1][y] == 0 &&
+                field[x + 1][y - 1] == 0 && field[x - 1][y-1] == 0);
+    }
+    // функция генерирует напрвление , проверяет уместностность постановки корабля
+    // если же корабль установить невозможно в выбранном направлении , меняет направление
+    // если же с данными координатами невозможно посторить корабль во всех направлениях , то
+    // возвращает false и уже в функции setShips мы меняем сами координаты
+    private boolean isDirectionFound(int x,int y, int cellNumber)
+    {
+        
+    }
+
 
 }
