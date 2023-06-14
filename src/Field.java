@@ -27,7 +27,14 @@ public class Field {
             System.out.print(i + "  ");
             for(int j = 0; j < field[i].length; j++)
             {
-                System.out.print(field[i][j] + "  ");
+                if(field[i][j] == 0)
+                {
+                    System.out.print("-  ");
+                }
+                //System.out.print(field[i][j] + "  ");
+                else{
+                    System.out.print("x  ");
+                }
             }
             System.out.println();
         }
@@ -40,107 +47,98 @@ public class Field {
     // 1 ship with 4 cells
     void setShips(int ShipsCount)
     {
-
-        if(ShipsCount == 10)// if it is classical version of the game
+        int ShipsNumberOfEachKind = 1;// we have only one ship with 4 decks
+        for(int decksCount  = 4; decksCount > 0; decksCount--)// number of decks
         {
-            int ShipsNumberOfEachKind = 1;
-            for(int decksCount  = 4; decksCount > 0; decksCount--)// number of ships models
+
+            for(int shipsNumOfOneKind = ShipsNumberOfEachKind ; shipsNumOfOneKind > 0; shipsNumOfOneKind--)// number of ships of one model
             {
-                /////////ОШИБКА !!!!!!!!!!!!!! БЕСКОНЕЧНЫЙ ЦИКЛ !!!!!!!
-                for(int i = ShipsNumberOfEachKind ; i > 0; i--)// number of ships of one model
+                boolean isShipSet = false;
+                int x,y;
+                while(!isShipSet)
                 {
-                    boolean isShipSet = false;
-                    int x,y;
-                    while(!isShipSet)
+                    // generate random values [0,9] for x and y coordinates of initial point of our ship
+                    x = rand.nextInt(field.length);//rows
+                    y = rand.nextInt(field.length);//columns
+                    //System.out.print("x = " + x + " y = " + y + "\n");
+                    // checking
+                    if(isNoShipNear(x,y))//if there are any other ships or deck is already occupied
                     {
-                        // generate random values [0,9] for x and y coordinates of initial point of our ship
-                        x = rand.nextInt(10);//rows
-                        y = rand.nextInt(10);//columns
-                        System.out.print("x = " + x + " y = " + y + "\n");
-                        // проверка ///////////////////////
-                        if(isNoShipNear(x,y))// если клетка не занята ,нет ли кораблей поблизости
+                        if(decksCount > 1)// if more than  one deck
                         {
-                            if(decksCount != 1)// если у нас не однопалубный корабль
+                            if(isDirectionFound(x,y,decksCount))
                             {
-                                // выбор направления ///////////(сначала сделаем их прямыми  то есть корабль будет расти в одну сторону )
-                                // но далее можно сделать цикл с постоянным выбором напрвления так что корабль может расти в разных направлениях
-                                if(isDirectionFound(x,y,decksCount))
+                                // Setting ship
+                                switch(Direction)
                                 {
-                                    // устанавливаем корабль
-                                    switch(Direction)
-                                    {
-                                        case 0 :
-                                            for(int k = 0; k < decksCount; k++)
-                                            {
-                                                field[x - k][y] = 1;
-                                            }
-                                            break;
-                                        case 1:
-                                            for(int k = 0; k < decksCount; k++)
-                                            {
-                                                field[x][y + k] = 1;
-                                            }
-                                            break;
-                                        case 2:
-                                            for(int k = 0; k < decksCount; k++)
-                                            {
-                                                field[x + k][y] = 1;
-                                            }
-                                            break;
-                                        case 3:
-                                            for(int k = 0; k < decksCount; k++)
-                                            {
-                                                field[x][y - k] = 1;
-                                            }
-                                            break;
-                                    }
-                                    isShipSet = true;
+                                    case 0 :
+                                        for(int k = 0; k < decksCount; k++)
+                                        {
+                                            field[x - k][y] = 1;
+                                        }
+                                        break;
+                                    case 1:
+                                        for(int k = 0; k < decksCount; k++)
+                                        {
+                                            field[x][y + k] = 1;
+                                        }
+                                        break;
+                                    case 2:
+                                        for(int k = 0; k < decksCount; k++)
+                                        {
+                                            field[x + k][y] = 1;
+                                        }
+                                        break;
+                                    case 3:
+                                        for(int k = 0; k < decksCount; k++)
+                                        {
+                                            field[x][y - k] = 1;
+                                        }
+                                        break;
                                 }
-                            }
-                            else{
-                                field[x][y] = 1;
+                                isShipSet = true;
                             }
                         }
+                        else{
+                            //System.out.println("Direction is successfully found !!! ");
+                            field[x][y] = 1;
+                            isShipSet = true;
+                        }
                     }
-
                 }
-                ShipsNumberOfEachKind++;
-                System.out.println();
-            }
-            // выведем полученное поле на экран
-            ShowField();
-        }else {
-            // если игра не классическая ?
-        }
 
+            }
+            ShipsNumberOfEachKind++;
+            System.out.println();
+        }
+        // output the result look of the field
+        ShowField();
     }
     private boolean isNoShipNear(int x,int y)// x - rows , y - columns
     {
-        if(x != 0 && y != 0 && x != field.length - 1 && y != field.length - 1)// если это не границы поля
+        if(x != 0 && y != 0 && x != field.length - 1 && y != field.length - 1)// if it is not bounds of the array
         {
             return (field[x + 1][y + 1] == 0 && field[x][y + 1] == 0 && field[x][y-1] == 0 &&
                     field[x - 1][y + 1] == 0 && field[x - 1][y] == 0 && field[x + 1][y] == 0 &&
                     field[x + 1][y - 1] == 0 && field[x - 1][y-1] == 0 && field[x][y] == 0);
         }else{
-            return false ; ///////////////////////
+            return false ;
         }
-
     }
-    // функция генерирует напрвление ,
-    // проверяет уместностность постановки корабля
-    // если же корабль установить невозможно в выбранном направлении , меняет направление
-    // если же с данными координатами невозможно посторить корабль во всех направлениях , то
-    // возвращает false и уже в функции setShips мы меняем сами координаты
+    // the function generates a direction,
+    // checks if the ship is placed appropriately
+    // if the ship cannot be installed in the selected direction, it changes direction
+    // if with the given coordinates it is impossible to build a ship in all directions, then
+    //  returns false and already in the setShips function we change the coordinates themselves
     private boolean isDirectionFound(int x,int y, int decksNumber)
     {
         boolean directionChecked = false;
-        boolean isSpaceFree = false;
         while(!directionChecked)
         {
             // generate direction
             // 0 - top , 1 - right , 2 - bottom , 3 - left
             int direction  = rand.nextInt(4);
-            System.out.println("direction is " + direction);
+            //System.out.println("direction is " + direction);
 
             switch(direction)
             {
@@ -149,19 +147,17 @@ public class Field {
                     // arrays bound
                    if(x >= decksNumber - 1)
                    {
-                       // checking ships around
-
                        for(int i = 0; i < decksNumber; i++)
                        {
-                           isSpaceFree = isNoShipNear(x - i, y);// передаем каждую палубу на проверку
-                           if(!isSpaceFree)// если в какой-то из палуб проблема то выход и поиск нового направления
+                           directionChecked = isNoShipNear(x - i, y);// we pass each deck for verification
+                           if(!directionChecked)// if there is a problem in one of the decks, then exit and search for a new direction
                            {
-                              break;
+                               directionChecked = false;
+                               break;
                            }
-                           if(i == decksNumber - 1)// если все таки мы достигли конца цикла не выйдя досрочно, направление удачное
+                           if(i == decksNumber - 1)// if we still reached the end of the loop without exiting with break, the direction is successful
                            {
-                               directionChecked = true;
-                               System.out.println("Direction is successfully found !!! ");
+                               //System.out.println("Direction is successfully found !!! ");
                                Direction = direction;
                            }
                        }
@@ -172,19 +168,18 @@ public class Field {
                     // arrays bound
                     if( y <= field.length - decksNumber)
                     {
-                        // checking ships around
-
                         for(int i = 0; i < decksNumber; i++)
                         {
-                            isSpaceFree = isNoShipNear(x, y + i);// передаем каждую палубу на проверку
-                            if(!isSpaceFree)// если в какой-то из палуб проблема то выход и поиск нового направления
+                            directionChecked = isNoShipNear(x, y + i);
+                            if(!directionChecked)
                             {
+                                directionChecked = false;
                                 break;
                             }
-                            if(i == decksNumber - 1)// если все таки мы достигли конца цикла не выйдя досрочно, направление удачное
+                            if(i == decksNumber - 1)
                             {
-                                directionChecked = true;
-                                System.out.println("Direction is successfully found !!! ");
+
+                                //System.out.println("Direction is successfully found !!! ");
                                 Direction = direction;
                             }
                         }
@@ -194,19 +189,17 @@ public class Field {
                 case 2:
                     if(x <= field.length - decksNumber)
                     {
-                        // checking ships around
-
                         for(int i = 0; i < decksNumber; i++)
                         {
-                            isSpaceFree = isNoShipNear(x + i, y);// передаем каждую палубу на проверку
-                            if(!isSpaceFree)// если в какой-то из палуб проблема то выход и поиск нового направления
+                            directionChecked = isNoShipNear(x + i, y);
+                            if(!directionChecked)
                             {
+                                directionChecked = false;
                                 break;
                             }
-                            if(i == decksNumber - 1)// если все таки мы достигли конца цикла не выйдя досрочно, направление удачное
+                            if(i == decksNumber - 1)
                             {
-                                directionChecked = true;
-                                System.out.println("Direction is successfully found !!! ");
+                                //System.out.println("Direction is successfully found !!! ");
                                 Direction = direction;
                             }
                         }
@@ -216,19 +209,17 @@ public class Field {
                 case 3:
                     if(y >= decksNumber - 1)
                     {
-                        // checking ships around
-
                         for(int i = 0; i < decksNumber; i++)
                         {
-                            isSpaceFree = isNoShipNear(x , y - i );// передаем каждую палубу на проверку
-                            if(!isSpaceFree)// если в какой-то из палуб проблема то выход и поиск нового направления
+                            directionChecked = isNoShipNear(x , y - i );
+                            if(!directionChecked)
                             {
+                                directionChecked = false;
                                 break;
                             }
-                            if(i == decksNumber - 1)// если все таки мы достигли конца цикла не выйдя досрочно, направление удачное
+                            if(i == decksNumber - 1)
                             {
-                                directionChecked = true;
-                                System.out.println("Direction is successfully found !!! ");
+                                //System.out.println("Direction is successfully found !!! ");
                                 Direction = direction;
                             }
                         }
@@ -238,6 +229,5 @@ public class Field {
             }
         }
         return true;
-
     }
 }
