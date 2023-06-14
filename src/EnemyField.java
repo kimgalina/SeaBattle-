@@ -1,12 +1,11 @@
-import java.util.Random;
-
-public class Field {
+public class EnemyField {
     private int size;
     private int[][] field ;
     private String name;
     private int Direction;
     private int FieldEnd ;
-    Field(int size,String name)
+    int allDecksNum = 20;
+    EnemyField(int size, String name)
     {
         this.size = size;
         System.out.println("Generating virtual field ...");
@@ -14,9 +13,14 @@ public class Field {
         this.name = name;
         FieldEnd = field.length - 1;
     }
+    int[][] GetEnemyField()
+    {
+        return field;
+    }
+
     void ShowField()
     {
-        System.out.print("\n" + name + "\n" + "   ");
+        System.out.print("\n " + name + "\n" + "   ");
         for(int i = 0 ; i < 10; i++)
         {
             System.out.print(i + "  ");
@@ -38,7 +42,7 @@ public class Field {
             }
             System.out.println();
         }
-        System.out.println("\n");
+
     }
 
     void setShips(int ShipsCount)
@@ -106,10 +110,7 @@ public class Field {
 
             }
             ShipsNumberOfEachKind++;
-            System.out.println();
         }
-        // output the result look of the field
-        ShowField();
     }
     private boolean isNoShipNear(int x,int y)// x - rows , y - columns
     {
