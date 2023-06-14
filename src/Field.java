@@ -5,14 +5,14 @@ public class Field {
     private int[][] field ;
     private String name;
     private int Direction;
-
-    Random rand = new Random(10);
+    private int FieldEnd ;
     Field(int size,String name)
     {
         this.size = size;
         System.out.println("Generating virtual field ...");
         field = new int[size][size];
         this.name = name;
+        FieldEnd = field.length - 1;
     }
     void ShowField()
     {
@@ -40,11 +40,7 @@ public class Field {
         }
         System.out.println("\n");
     }
-    // fill the field with given number of ships
-    // 4 ships with 1 cell
-    // 3 ships with 2 cells
-    // 2 ships with 3 cells
-    // 1 ship with 4 cells
+
     void setShips(int ShipsCount)
     {
         int ShipsNumberOfEachKind = 1;// we have only one ship with 4 decks
@@ -58,8 +54,9 @@ public class Field {
                 while(!isShipSet)
                 {
                     // generate random values [0,9] for x and y coordinates of initial point of our ship
-                    x = rand.nextInt(field.length);//rows
-                    y = rand.nextInt(field.length);//columns
+                    // random value [a,b)      (int) Math.random() * (b - a) + a
+                    x = (int) (Math.random() * field.length);//rows
+                    y = (int) (Math.random() * field.length);//columns
                     //System.out.print("x = " + x + " y = " + y + "\n");
                     // checking
                     if(isNoShipNear(x,y))//if there are any other ships or deck is already occupied
@@ -121,8 +118,44 @@ public class Field {
             return (field[x + 1][y + 1] == 0 && field[x][y + 1] == 0 && field[x][y-1] == 0 &&
                     field[x - 1][y + 1] == 0 && field[x - 1][y] == 0 && field[x + 1][y] == 0 &&
                     field[x + 1][y - 1] == 0 && field[x - 1][y-1] == 0 && field[x][y] == 0);
-        }else{
-            return false ;
+        }
+        else{
+            //horizontally
+            if(y < FieldEnd && y >= 1)
+            {
+                if(field[x][y - 1] == 0 && field[x][y + 1] == 0 && field[x][y] == 0)
+                {
+                    if(x == 0)
+                    {
+                        return (field[x + 1][y + 1] == 0 && field[x + 1][y - 1] == 0 && field[x + 1][y] == 0);
+                    }
+                    else if(x == FieldEnd)
+                    {
+                        return(field[x - 1][y + 1] == 0 && field[x - 1][y - 1] == 0 && field[x - 1][y] == 0);
+                    }
+                }else{
+                    return false;
+                }
+            }
+            // vertically
+           if(x < FieldEnd && x >= 1)
+            {
+                if(field[x + 1][y] == 0 && field[x - 1][y] == 0 && field[x][y] == 0)
+                {
+                    if(y == 0)
+                    {
+                        return (field[x - 1][y + 1] == 0 && field[x + 1][y + 1] == 0 && field[x][y + 1] == 0);
+                    }
+                    else if(y == FieldEnd)
+                    {
+                        return (field[x - 1][y - 1] == 0 && field[x + 1][y - 1] == 0 && field[x][y - 1] == 0);
+                    }
+                }else{
+                    return false;
+                }
+            }
+           return false;
+
         }
     }
     // the function generates a direction,
@@ -133,11 +166,12 @@ public class Field {
     private boolean isDirectionFound(int x,int y, int decksNumber)
     {
         boolean directionChecked = false;
+        int directionNumber = 4;
         while(!directionChecked)
         {
             // generate direction
             // 0 - top , 1 - right , 2 - bottom , 3 - left
-            int direction  = rand.nextInt(4);
+            int direction  = (int)(Math.random()*directionNumber);
             //System.out.println("direction is " + direction);
 
             switch(direction)
@@ -178,7 +212,6 @@ public class Field {
                             }
                             if(i == decksNumber - 1)
                             {
-
                                 //System.out.println("Direction is successfully found !!! ");
                                 Direction = direction;
                             }

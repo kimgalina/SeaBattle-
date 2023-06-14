@@ -12,13 +12,7 @@ public class Game {
         myField = new Field(10,"myField");
         gamer  = new Gamer();
     }
-    /*Game(int ShipsCount,int fieldSize)//если передается какой-то парматер , то это число караблей  в игре и размер поля
-    {
-        this.ShipsCount = ShipsCount;
-        enemyField = new Field(fieldSize,"enemyField");
-        myField = new Field(fieldSize,"myField");
-        gamer = new Gamer();
-    }*/
+
     void StartGame()
     {
         System.out.println("Game was started >>>");
