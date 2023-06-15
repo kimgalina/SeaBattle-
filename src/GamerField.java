@@ -2,6 +2,7 @@ public class GamerField {
     private int size;
     private int[][] field1 ;
     private String name;
+
     GamerField(int size, String name)
     {
         this.size = size;
@@ -55,7 +56,13 @@ public class GamerField {
     {
         if(field1[x][y] == 1)
         {
-            System.out.println("Hit !");
+            // если нет по близости кораблей значит убил ///////////////////s
+           if(EnemyField.isNoShipNear(x,y))
+           {
+               System.out.println("Killed !");
+           }else{
+               System.out.println("Hit !");
+           }
             field1[x][y] = 2;
             return true;
         }
@@ -69,4 +76,5 @@ public class GamerField {
             return false;
         }
     }
+
 }

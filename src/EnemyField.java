@@ -1,9 +1,9 @@
 public class EnemyField {
     private int size;
-    private int[][] field ;
+    private static int[][] field ;
     private String name;
     private int Direction;
-    private int FieldEnd ;
+    private static int FieldEnd ;
     EnemyField(int size, String name)
     {
         this.size = size;
@@ -62,7 +62,7 @@ public class EnemyField {
                     y = (int) (Math.random() * field.length);//columns
                     //System.out.print("x = " + x + " y = " + y + "\n");
                     // checking
-                    if(isNoShipNear(x,y))//if there are any other ships or deck is already occupied
+                    if(field[x][y] == 0 && isNoShipNear(x,y))//if there are any other ships or deck is already occupied
                     {
                         if(decksCount > 1)// if more than  one deck
                         {
@@ -111,19 +111,19 @@ public class EnemyField {
             ShipsNumberOfEachKind++;
         }
     }
-    private boolean isNoShipNear(int x,int y)// x - rows , y - columns
+    static  boolean isNoShipNear(int x,int y)// x - rows , y - columns
     {
         if(x != 0 && y != 0 && x != field.length - 1 && y != field.length - 1)// if it is not bounds of the array
         {
-            return (field[x + 1][y + 1] == 0 && field[x][y + 1] == 0 && field[x][y-1] == 0 &&
-                    field[x - 1][y + 1] == 0 && field[x - 1][y] == 0 && field[x + 1][y] == 0 &&
-                    field[x + 1][y - 1] == 0 && field[x - 1][y-1] == 0 && field[x][y] == 0);
+            return ((field[x + 1][y + 1] == 0)&& (field[x][y + 1] == 0) && (field[x][y-1] == 0) &&
+                    (field[x - 1][y + 1] == 0) && (field[x - 1][y] == 0) && (field[x + 1][y] == 0) &&
+                    (field[x + 1][y - 1] == 0) && (field[x - 1][y-1] == 0));
         }
         else{
             //horizontally
             if(y < FieldEnd && y >= 1)
             {
-                if(field[x][y - 1] == 0 && field[x][y + 1] == 0 && field[x][y] == 0)
+                if(field[x][y - 1] == 0 && field[x][y + 1] == 0)
                 {
                     if(x == 0)
                     {
@@ -140,7 +140,7 @@ public class EnemyField {
             // vertically
            if(x < FieldEnd && x >= 1)
             {
-                if(field[x + 1][y] == 0 && field[x - 1][y] == 0 && field[x][y] == 0)
+                if(field[x + 1][y] == 0 && field[x - 1][y] == 0)
                 {
                     if(y == 0)
                     {
@@ -179,7 +179,7 @@ public class EnemyField {
                 case 0:
                     // two type of checking : arrays bounds and near ships
                     // arrays bound
-                   if(x >= decksNumber - 1)
+                   if(x >= decksNumber - 1 )// если мы не выйдем за границы поля
                    {
                        for(int i = 0; i < decksNumber; i++)
                        {
@@ -220,7 +220,7 @@ public class EnemyField {
                     }
                     break;
                 case 2:
-                    if(x <= field.length - decksNumber)
+                    if(x <= field.length - decksNumber )
                     {
                         for(int i = 0; i < decksNumber; i++)
                         {
