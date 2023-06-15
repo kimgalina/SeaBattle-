@@ -23,19 +23,21 @@ public class Game {
     void StartGame()
     {
         int attempts = gamer.attemptsNum;
+        float result;
         while(gamer.attemptsNum > 0)
         {
             System.out.println("Enter coordinates of the target >>> ");
             gamer.makeGuess();
             if(myField.CheckGamerGuess(gamer.GetX(),gamer.GetY()))
             {
-                gamer.increaseMark();
+                gamer.increaseScore();
             }
             myField.ShowField();
         }
+        result = gamer.GetScore()/attempts;
         System.out.println("Your number of attempts is expired ((((");
         System.out.println("______________GAME OVER _______________");
-        System.out.println("Your results : " + (float)(gamer.GetScore()/attempts) * 100 );
+        System.out.println("Your results : " + result);
     }
 
 }

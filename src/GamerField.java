@@ -32,16 +32,25 @@ public class GamerField {
             System.out.print(i + "  ");
             for(int j = 0; j < field1[i].length; j++)
             {
-                if(field1[i][j] == 2)
+                if(field1[i][j] == 2)// если попали
                 {
                     System.out.print("x  ");
-                }else{
+                }
+                else if(field1[i][j] == 3){// если промахнулись
+                    System.out.print(".  ");
+                }
+                else{// если там стоит 1(корабль) или 0 (ничего)
                     System.out.print("-  ");
                 }
+
             }
             System.out.println();
         }
     }
+    // 1 - стоит не тронутый корабль
+    // 2 - стоял корабль но мы попали
+    // 0 - ничего не стоит и мы не стреляли
+    // 3 - промахнулись
     boolean CheckGamerGuess(int x , int y)
     {
         if(field1[x][y] == 1)
@@ -49,7 +58,13 @@ public class GamerField {
             System.out.println("Hit !");
             field1[x][y] = 2;
             return true;
-        }else{
+        }
+        else if (field1[x][y] == 0){
+            field1[x][y] = 3;
+            System.out.println("Sorry , try again )");
+            return false;
+        }
+        else{// если мы уже попали в корабль и там стоит 2 или если мы уже промахнулись и там стоит 3
             System.out.println("Sorry , try again )");
             return false;
         }

@@ -4,7 +4,7 @@ public class Gamer {
     String name;
     Scanner console = new Scanner(System.in);
     int attemptsNum = 10;
-    private int score = 0;
+    private float score = 0;
     private int  x ;
     private int  y;
     Gamer()
@@ -36,11 +36,11 @@ public class Gamer {
     {
         return y;
     }
-    void increaseMark()
+    void increaseScore()
     {
         score++;
     }
-    int GetScore()
+    float GetScore()
     {
         return score;
     }

@@ -4,7 +4,6 @@ public class EnemyField {
     private String name;
     private int Direction;
     private int FieldEnd ;
-    int allDecksNum = 20;
     EnemyField(int size, String name)
     {
         this.size = size;
